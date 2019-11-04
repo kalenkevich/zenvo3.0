@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "inlineSources": true,
+    "sourceMap": true,
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2017",
+      "esnext.array",
+      "dom"
+    ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

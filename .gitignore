@@ -1,0 +1,10 @@
+.idea
+
+crm-backend/dist
+crm-backend/node_modules
+crm-backend/package-lock.json
+
+web-client/dist
+web-client/node_modules
+web-client/package-lock.json
+
