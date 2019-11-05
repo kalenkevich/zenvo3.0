@@ -21,16 +21,24 @@ export default class CategoryService {
   }
 
   getCategoriesByNames(names: string[]) {
+    if (names.length === 0) {
+      return [];
+    }
+
     return this.entityManager
       .createQueryBuilder()
       .select('category')
       .from(Category, 'category')
-      .where("'category.name' IN (:names)", { names })
+      .where("category.name IN (:...names)", { names })
       .getMany();
   }
 
   async createCategories(names: string[]) {
     const values = (names || []).map(name => ({ name }));
+
+    if (names.length === 0) {
+      return [];
+    }
 
     await this.entityManager
       .createQueryBuilder()

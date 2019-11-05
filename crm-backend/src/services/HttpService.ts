@@ -15,7 +15,7 @@ export default class HttpService {
     } catch (error) {
       this.logger.error(`[HttpService.get]: Error while getting ${url}`);
 
-      throw error;
+      throw error.data.error;
     }
   }
 
@@ -27,7 +27,7 @@ export default class HttpService {
     } catch (error) {
       this.logger.error(`[HttpService.post]: Error while post to ${url} with data: ${JSON.stringify(data)}`);
 
-      throw error;
+      throw error.data.error;
     }
   }
 
@@ -39,7 +39,7 @@ export default class HttpService {
     } catch (error) {
       this.logger.error(`[HttpService.put]: Error while put to ${url} with data: ${JSON.stringify(data)}`);
 
-      throw error;
+      throw error.data.error;
     }
   }
 
@@ -51,7 +51,7 @@ export default class HttpService {
     } catch (error) {
       this.logger.error(`[HttpService.delete]: Error while delete to ${url} with`);
 
-      throw error;
+      throw error.data.error;
     }
   }
 }

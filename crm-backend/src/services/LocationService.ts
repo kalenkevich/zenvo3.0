@@ -21,16 +21,24 @@ export default class LocationService {
   }
 
   getLocationsByNames(names: string[]) {
+    if (names.length === 0) {
+      return [];
+    }
+
     return this.entityManager
     .createQueryBuilder()
     .select('location')
     .from(Location, 'location')
-    .where("'location.name' IN (:names)", { names })
+    .where("location.name IN (:...names)", { names })
     .getMany();
   }
 
   async createLocations(names: string[]) {
     const values = (names || []).map(name => ({ name }));
+
+    if (names.length === 0) {
+      return [];
+    }
 
     await this.entityManager
     .createQueryBuilder()

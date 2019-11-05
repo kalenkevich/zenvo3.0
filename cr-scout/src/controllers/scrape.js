@@ -1,3 +1,4 @@
+const Logger = require('../services/Logger').Logger;
 const RelaxPhotographerScrapper = require('../scrape/relax/RelaxPhotographerScrapper').RelaxPhotographerScrapper;
 
 module.exports = (app) => {
@@ -15,6 +16,8 @@ module.exports = (app) => {
         result,
       });
     } catch (error) {
+      Logger.error(error.message);
+
       return res.status(500).json({
         status: -2,
         result: null,

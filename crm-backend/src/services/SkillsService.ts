@@ -21,16 +21,24 @@ export default class SkillsService {
   }
 
   getSkillsByNames(names: string[]) {
+    if (names.length === 0) {
+      return [];
+    }
+
     return this.entityManager
     .createQueryBuilder()
     .select('skill')
     .from(SkillModel, 'skill')
-    .where("'skill.name' IN (:names)", { names })
+    .where("skill.name IN (:...names)", { names })
     .getMany();
   }
 
   async createSkills(names: string[]) {
     const values = (names || []).map(name => ({ name }));
+
+    if (names.length === 0) {
+      return [];
+    }
 
     await this.entityManager
     .createQueryBuilder()

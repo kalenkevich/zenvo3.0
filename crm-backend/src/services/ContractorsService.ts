@@ -57,6 +57,9 @@ export default class ContractorsService {
         .createQueryBuilder()
         .select("profile")
         .from(Contractor, "profile")
+        .innerJoinAndSelect("profile.location", "location")
+        .innerJoinAndSelect("profile.category", "category")
+        .innerJoinAndSelect("profile.skills", "skills")
         .skip(pageOptions.page * pageOptions.pageSize)
         .take(pageOptions.pageSize)
         .getManyAndCount();
@@ -85,7 +88,9 @@ export default class ContractorsService {
       ] = await Promise.all([
         this.categoryService.findOrCreateCategories([rawContractor.category.name]),
         this.locationService.findOrCreateLocations([rawContractor.location.name]),
-        this.skillsService.findOrCreateSkills((rawContractor.skills || []).map(({ name }) => name))
+        this.skillsService.findOrCreateSkills((rawContractor.skills || [])
+          .filter(({ name }) => name)
+          .map(({ name }) => name))
       ]);
 
       return this.createContractor({

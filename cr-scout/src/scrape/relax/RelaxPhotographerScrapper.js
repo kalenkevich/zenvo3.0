@@ -4,8 +4,7 @@ class RelaxPhotographerScrapper extends BaseScrapper {
   async scrape() {
     const data = await this.page.evaluate(() => {
       const getName = (document) => {
-        const titleSpan = document.querySelector(
-          'div.PersonalTitle__content .PersonalTitle__text span');
+        const titleSpan = document.querySelector('div.PersonalTitle__content .PersonalTitle__text span');
 
         return titleSpan.textContent;
       };
@@ -29,10 +28,14 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getVkContactInfo = (document) => {
-        const button = document.querySelector(
-          '.AdditionalContacts__button.Button.AdditionalContacts__button--vk.AdditionalContacts__button--onlyIcon');
+        const button = document.querySelector('.AdditionalContacts__button.Button.AdditionalContacts__button--vk.AdditionalContacts__button--onlyIcon');
+
+        if (!button) {
+          return null;
+        }
+
         const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url');
+        const value = queryParams.get('url') || '';
 
         return {
           type: 'vk',
@@ -43,8 +46,13 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       const getInstagramContactInfo = (document) => {
         const button = document.querySelector(
           '.AdditionalContacts__button.Button.AdditionalContacts__button--instagram.AdditionalContacts__button--onlyIcon');
+
+        if (!button) {
+          return null;
+        }
+
         const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url');
+        const value = queryParams.get('url') || '';;
 
         return {
           type: 'instagram',
@@ -55,8 +63,13 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       const getViberContactInfo = (document) => {
         const button = document.querySelector(
           '.AdditionalContacts__button.Button.AdditionalContacts__button--viber');
+
+        if (!button) {
+          return null;
+        }
+
         const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url');
+        const value = queryParams.get('url') || '';
 
         return {
           type: 'instagram',
@@ -65,8 +78,12 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getPhoneContactInfo = (document) => {
-        const button = document.querySelector(
-          '.Button.PersonalHeaderButton.PersonalHeaderButton--phone a');
+        const button = document.querySelector('.Button.PersonalHeaderButton.PersonalHeaderButton--phone a');
+
+        if (!button) {
+          return null;
+        }
+
         const rawText = button.href;
         const value = rawText.slice(4, rawText.length);
 
@@ -77,8 +94,7 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getLocation = (document) => {
-        const span = document.querySelector(
-          '.Button.PersonalContacts__address.PersonalContacts__item.Button--outline span');
+        const span = document.querySelector('.Button.PersonalContacts__address.PersonalContacts__item.Button--outline span');
 
         return {
           name: span.textContent,
@@ -92,27 +108,42 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getSkills = (document) => {
-        const containers = document.querySelectorAll(
-          '.Price.PersonalFeatures__price.PersonalFeatures__price--wrapped.Price--columns50');
+        const containers = [...document.querySelectorAll('.Price.PersonalFeatures__price.PersonalFeatures__price--wrapped.Price--columns50')];
 
-        const photoCategoriesSection = [...containers].find(container => {
-          const sectionName = container.querySelector(
-            '.Price__left').textContent;
+        const photoCategoriesSection = containers.find(container => {
+          if (!container) {
+            return false;
+          }
+
+          const sectionName = container.querySelector('.Price__left').textContent;
 
           return sectionName === 'Виды съемки';
         });
 
-        const skillsSection = [...containers].find(container => {
+        const skillsSection = containers.find(container => {
+          if (!container) {
+            return false;
+          }
+
           const sectionName = container.querySelector('.Price__left').textContent;
 
           return sectionName === 'Возможности';
         });
 
-        const photoCategories = [...photoCategoriesSection.querySelector('.Price__right span').children]
-          .map(item => ({ name: item.textContent }));
+        let photoCategories = [];
+        let skills = [];
 
-        const skills = [...skillsSection.querySelector('.Price__right span').children]
-          .map(item => ({ name: item.textContent }));
+        if (photoCategoriesSection) {
+          const children = [...photoCategoriesSection.querySelector('.Price__right span').children];
+
+          photoCategories = children.map(item => ({ name: item.textContent }))
+        }
+
+        if (skillsSection) {
+          const children = [...skillsSection.querySelector('.Price__right span').children];
+
+          skills = children.map(item => ({ name: item.textContent }));
+        }
 
         return [...photoCategories, ...skills];
       };
