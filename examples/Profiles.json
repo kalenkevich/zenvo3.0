@@ -1,0 +1,43 @@
+[{
+  "id": 1,
+  "name":  "some name",
+  "rate":  10,
+  "avatarUrl": "some url",
+  "contacts": [{
+    "type": "phone",
+    "value": "+375111111"
+  }],
+  "location": {
+    "id": 1,
+    "name": "location 1",
+    "latitude": "123123",
+    "longitude": "123123",
+
+    "indexId": "locationIndexId1"
+  },
+  "category": {
+    "id": 1,
+    "name": "Фотограф",
+
+    "indexId": "categoryIndexId1"
+  },
+  "skills": [{
+    "id": 1,
+    "name": "Семейное фото",
+    "category": 1,
+
+    "indexId": "skillIndexId1"
+  }, {
+    "id": 2,
+    "name": "Свадебное фото",
+    "category": 1,
+
+    "indexId": ""
+  }, {
+    "id": 3,
+    "name": "Пейзажи",
+    "category": 1,
+
+    "indexId": "skillIndexId3"
+  }]
+}]

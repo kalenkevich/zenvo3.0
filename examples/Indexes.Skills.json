@@ -1,0 +1,16 @@
+[{
+  "id": "skillIndexId1",
+  "name": "Семейное фото",
+  "categoryIndex": "categoryIndexId1",
+  "vector": [1, 2]
+}, {
+  "id": "skillIndexId2",
+  "name": "Свадебное фото",
+  "categoryIndex": "categoryIndexId1",
+  "vector": []
+}, {
+  "id": "skillIndexId3",
+  "name": "Пейзажи",
+  "categoryIndex": "categoryIndexId1",
+  "vector": [3, 3]
+}]
