@@ -9,34 +9,32 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
 import settings from '../config/settings';
-import DatabaseConnector from './database/DatabaseInterface';
 import PostgresDBService from './database/PostgresDBService';
 import resolvers from './resolvers';
 import Logger from './services/Logger';
-import { User, UserRole } from './models/UserModel';
+import CrScoutService from './services/CrScoutService';
+import CrSearchService from './services/CrSearchService';
+
+Container.set('config', settings);
 
 const logger: Logger = Container.get('Logger');
-
-const currentConfiguration = process.env.ENVIRONMENT || 'development';
-const port = process.env.PORT || settings.port;
-
-logger.info(`Environment: ${currentConfiguration}`);
 
 export class ApplicationServer {
   public app: Application;
   public server: ApolloServer;
+  public settings: any;
 
-  constructor(private dbConnector: DatabaseConnector) {
+  constructor(settings: any) {
+    this.settings = settings;
     this.app = express();
-  }
-
-  get userRepository() {
-    return this.dbConnector.connection.getRepository(User);
   }
 
   public async init() {
     this.registerBodyParsers();
     this.configureHeaders();
+    await this.initCrmDatabase();
+    await this.initCrScout();
+    await this.initCrSearch();
     await this.initServer();
   }
 
@@ -56,24 +54,52 @@ export class ApplicationServer {
     }));
   }
 
+  public initCrmDatabase() {
+    const dBConnector = new PostgresDBService(settings.CrmDatabaseUrl);
+
+    logger.info(`DB connected to ${this.settings.CrmDatabaseUrl}`);
+
+    Container.set('EntityManager', dBConnector.entityManager);
+
+    return dBConnector.connect()
+  }
+
+  public async initCrScout() {
+    const crScoutService: CrScoutService = Container.get('CrScoutService');
+
+    try {
+      await crScoutService.isAlive();
+
+      logger.info(`CrScout: connected to ${this.settings.CrScoutServiceUrl}`)
+    } catch (error) {
+      logger.error(`CrScout: error connection to ${this.settings.CrScoutServiceUrl} ${error}`)
+    }
+  }
+
+  public async initCrSearch() {
+    const crSearchService: CrSearchService = Container.get('CrSearchService');
+
+    try {
+      await crSearchService.isAlive();
+
+      logger.info(`CrSearch: connected to ${this.settings.CrSearchServiceUrl}`)
+    } catch (error) {
+      logger.error(`CrSearch: error connection to ${this.settings.CrSearchServiceUrl} ${error}`)
+    }
+  }
+
   public async initServer() {
-    this.app.set('port', port);
+    this.app.set('port', this.settings.port);
 
     const schema = await buildSchema({
       resolvers,
-      authChecker: ({root, args, context, info}, roles: UserRole[]) => {
-        const {user} = context;
-
-        return roles.indexOf(user.role) !== -1;
-      },
       container: Container,
     });
 
+    // @ts-ignore
     this.server = new ApolloServer({
       schema,
-      context: async ({req, res}) => {
-        return { request: req, response: res };
-      },
+      context: async ({req, res}) => ({ request: req, response: res }),
     });
 
     this.server.applyMiddleware({
@@ -84,22 +110,19 @@ export class ApplicationServer {
 
   public run() {
     try {
-      this.app.listen({port}, () => logger.info(`CRM Backend API running on port :${port}`));
+      this.app.listen({
+        port: this.settings.port,
+      }, () => logger.info(`CRMBackend running on port :${this.settings.port}`));
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   }
 }
 
-const dBConnector = new PostgresDBService(settings.databaseUrl);
+(async () => {
+  const server = new ApplicationServer(settings);
 
-dBConnector.connect().then(async () => {
-  logger.info(`DB connected to ${settings.databaseUrl}`);
-
-  Container.set('EntityManager', dBConnector.entityManager);
-
-  const server = new ApplicationServer(dBConnector);
   await server.init();
 
   server.run();
-});
+})();

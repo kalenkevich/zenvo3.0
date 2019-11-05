@@ -9,10 +9,9 @@ export default class HttpService {
 
   async get(url: string, config?: any) {
     try {
-      const result = await axios.get(url, config);
+      const result: any = await axios.get(url, config);
 
-      // return data.json();
-      return result;
+      return result.data;
     } catch (error) {
       this.logger.error(`[HttpService.get]: Error while getting ${url}`);
 
@@ -22,10 +21,9 @@ export default class HttpService {
 
   async post(url: string, data?: any, config?: any) {
     try {
-      const result = await axios.post(url, data, config);
+      const result: any = await axios.post(url, data, config);
 
-      // return data.json();
-      return result;
+      return result.data;
     } catch (error) {
       this.logger.error(`[HttpService.post]: Error while post to ${url} with data: ${JSON.stringify(data)}`);
 
@@ -35,10 +33,9 @@ export default class HttpService {
 
   async put(url: string, data?: any, config?: any) {
     try {
-      const result = await axios.post(url, data, config);
+      const result: any = await axios.post(url, data, config);
 
-      // return data.json();
-      return result;
+      return result.data;
     } catch (error) {
       this.logger.error(`[HttpService.put]: Error while put to ${url} with data: ${JSON.stringify(data)}`);
 
@@ -48,10 +45,9 @@ export default class HttpService {
 
   async delete(url: string, config?: any) {
     try {
-      const result = await axios.delete(url, config);
+      const result: any = await axios.delete(url, config);
 
-      // return data.json();
-      return result;
+      return result.data;
     } catch (error) {
       this.logger.error(`[HttpService.delete]: Error while delete to ${url} with`);
 

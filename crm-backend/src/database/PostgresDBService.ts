@@ -9,8 +9,8 @@ export default class PostgresDBConnector implements DatabaseConnectorInterface {
   public connection: Connection;
   public entityManager: EntityManager;
 
-  constructor(databaseUrl) {
-    this.databaseUrl = databaseUrl;
+  constructor(CrmDatabaseUrl) {
+    this.databaseUrl = CrmDatabaseUrl;
   }
 
   public async connect() {
