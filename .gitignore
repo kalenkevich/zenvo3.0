@@ -8,3 +8,5 @@ web-client/dist
 web-client/node_modules
 web-client/package-lock.json
 
+cr-scout/node_modules
+cr-scout/package-lock.json
