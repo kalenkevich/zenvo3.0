@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export default gql`
-    fragment ContactsFragment on Contacts {
+    fragment ContactFragment on Contact {
         type
         value
     }

@@ -10,6 +10,7 @@ class CrScoutServer {
   }
 
   init() {
+    this.app.use(express.json());
     this.applyControllers();
   }
 

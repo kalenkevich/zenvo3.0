@@ -1,3 +1,3 @@
 export default {
-  BackendUrl: 'http://localhost:9000/graphql',
+  BackendUrl: 'http://localhost:3000/graphql',
 };

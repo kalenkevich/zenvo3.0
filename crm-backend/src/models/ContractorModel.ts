@@ -30,6 +30,10 @@ export default class Contractor {
   @Column({default: ''})
   avatarUrl: string;
 
+  @Field()
+  @Column({default: ''})
+  description: string;
+
   @Field(type => [Contact])
   @Column({ type: 'jsonb' })
   contacts: Contact[];

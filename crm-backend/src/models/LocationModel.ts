@@ -13,11 +13,11 @@ export default class Location {
   public name: string;
 
   @Field()
-  @Column()
+  @Column({ default: '' })
   public latitude: string;
 
   @Field()
-  @Column()
+  @Column({ default: '' })
   public longitude: string;
 
   //------ System data ------

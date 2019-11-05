@@ -1,3 +1,12 @@
 {
-
+  "MENU_ITEM_CONTRACTORS": "Профайлы",
+  "MENU_ITEM_SETTINGS": "Настройки",
+  "CONTRACTORS_PAGE_TITLE": "Профайлы исполнителей",
+  "CONTRACTORS_TABLE_COLUMN_NAME": "Имя",
+  "CONTRACTORS_TABLE_COLUMN_RATE": "Рейтинг",
+  "CONTRACTORS_TABLE_COLUMN_LOCATION": "Город",
+  "CONTRACTORS_TABLE_COLUMN_CATEGORY": "Категория",
+  "CONTRACTORS_TABLE_COLUMN_SKILLS": "Навыки",
+  "IMPORT_PROFILE_LABEL": "URL для импорта",
+  "IMPORT_PROFILE_BUTTON": "Импортировать"
 }

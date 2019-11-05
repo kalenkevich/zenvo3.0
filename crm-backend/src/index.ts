@@ -54,14 +54,14 @@ export class ApplicationServer {
     }));
   }
 
-  public initCrmDatabase() {
+  public async initCrmDatabase() {
     const dBConnector = new PostgresDBService(settings.CrmDatabaseUrl);
+
+    await dBConnector.connect();
 
     logger.info(`DB connected to ${this.settings.CrmDatabaseUrl}`);
 
     Container.set('EntityManager', dBConnector.entityManager);
-
-    return dBConnector.connect()
   }
 
   public async initCrScout() {

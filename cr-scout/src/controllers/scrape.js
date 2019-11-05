@@ -2,9 +2,9 @@ const RelaxPhotographerScrapper = require('../scrape/relax/RelaxPhotographerScra
 
 module.exports = (app) => {
   app.post('/scrape/profile', async (req, res) => {
-    const { url } = req.body;
-
     try {
+      const { url } = req.body;
+
       this.relaxPhotographerScrapper = new RelaxPhotographerScrapper();
       await this.relaxPhotographerScrapper.init({ url });
 

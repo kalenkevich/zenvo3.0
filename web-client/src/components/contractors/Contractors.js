@@ -6,12 +6,14 @@ import Table from 'react-table';
 import 'react-table/react-table.css';
 import useStyles from './ContractorsStyle';
 import LoadingContext from '../../contexts/LoadingContext';
+import ImportForm from './ImportForm';
 
 const ContractorsPage = (props) => {
   const {
     data,
     pages,
     onFetchData,
+    onImport,
   } = props;
 
   const { t } = useTranslation();
@@ -19,43 +21,34 @@ const ContractorsPage = (props) => {
   const classes = useStyles();
 
   const columns = useMemo(() => [{
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_NAME'),
+    Header: t('CONTRACTORS_TABLE_COLUMN_NAME'),
     accessor: 'name',
-    Cell: row => (<Link to={`/profile/${row.original.node.user.id}/structure/binary`}>{row.value}</Link>)
+    Cell: row => (<Link to={`/contractor/${row.original.id}`}>{row.value}</Link>)
   }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_ID'),
-    id: 'id',
-    accessor: 'id',
+    Header: t('CONTRACTORS_TABLE_COLUMN_RATE'),
+    id: 'rate',
+    accessor: 'rate',
   }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_DEPTH'),
-    id: 'depth',
-    accessor: 'depth',
+    Header: t('CONTRACTORS_TABLE_COLUMN_LOCATION'),
+    id: 'locationName',
+    accessor: (data) => data.location.name,
   }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_QUALIFICATION'),
-    id: 'qualification',
-    accessor: 'qualification',
+    Header: t('CONTRACTORS_TABLE_COLUMN_CATEGORY'),
+    id: 'categoryName',
+    accessor: (data) => data.category.name,
   }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_REGISTRATION_DATE'),
-    id: 'createdAt',
-    accessor: 'createdAt',
-  }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_ACTIVATION_DATE'),
-    id: 'activatedAt',
-    accessor: 'activatedAt',
-  }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_CHILDREN'),
-    id: 'children',
-    accessor: 'children',
-  }, {
-    Header: t('USER_STRUCTURE_TABLE_BINARY_COLUMN_RULE'),
-    id: 'rule',
-    accessor: 'rule',
+    Header: t('CONTRACTORS_TABLE_COLUMN_SKILLS'),
+    id: 'skills',
+    accessor: (data) => data.skills.map(({ name }) => name).join(', '),
   }], []);
-  const loading = isLoading('userBinaryStructure');
+  const loading = isLoading('contractors');
 
   return (
     <div className={classes.root}>
-      <h2>{t('USER_STRUCTURE_PAGE_TITLE_BINARY')}</h2>
+      <h2>{t('CONTRACTORS_PAGE_TITLE')}</h2>
+      <ImportForm
+        onImport={onImport}
+      />
       <Table
         manual
         data={data}
@@ -75,6 +68,7 @@ ContractorsPage.propTypes = {
   pages: PropTypes.number,
   pageSize: PropTypes.number,
   onFetchData: PropTypes.func,
+  onImport: PropTypes.func,
 };
 
 export default ContractorsPage;

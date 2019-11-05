@@ -1,13 +1,15 @@
 import gql from 'graphql-tag';
-import ContractorsFragment from '../fragments/ContractorsFragment';
+import ContractorFragment from '../fragments/ContractorFragment';
 import GraphqlService from '../services/GraphqlService';
 
-export const ContractorsPageResult = gql`
-    total
-    data {
-    ...ContractorsFragment
+export const ContractorsPageResultFragment = gql`
+    fragment ContractorsPageResultFragment on ContractorsPageResult {
+        total
+        data {
+            ...ContractorFragment
+        }
     }
-    ${ContractorsFragment}
+    ${ContractorFragment}
 `;
 
 class AuthorizationAPI {
@@ -19,16 +21,47 @@ class AuthorizationAPI {
     const {searchContractors: contractorsPageResult } = await this.graphqlService.query({
       variables: {filter, pagingOptions},
       query: gql`
-          query SearchContractors($filter: SearchFilter!, $pagingOptions: PagingOptions) {
+          query SearchContractors($filter: SearchFilter!, $pagingOptions: PagingOptions!) {
               searchContractors(filter: $filter, pagingOptions :$pagingOptions) {
-                  ContractorsPageResult
+                  ...ContractorsPageResultFragment
               }
           }
-          ${ContractorsPageResult}
+          ${ContractorsPageResultFragment}
       `,
     });
 
     return contractorsPageResult;
+  }
+
+  async getAll(pagingOptions) {
+    const {getAllContractors: contractorsPageResult } = await this.graphqlService.query({
+      variables: {pagingOptions},
+      query: gql`
+          query GetAllContractors($pagingOptions: PagingOptions!) {
+              getAllContractors(pagingOptions :$pagingOptions) {
+                  ...ContractorsPageResultFragment
+              }
+          }
+          ${ContractorsPageResultFragment}
+      `,
+    });
+
+    return contractorsPageResult;
+  }
+  async importProfile(url) {
+    const { importContractor: result } = await this.graphqlService.mutate({
+      variables: { url },
+      mutation: gql`
+          mutation ImportContractor($url: String!) {
+              importContractor(url :$url) {
+                  ...ContractorFragment
+              }
+          }
+          ${ContractorFragment}
+      `,
+    });
+
+    return result;
   }
 }
 

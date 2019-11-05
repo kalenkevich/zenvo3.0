@@ -1,16 +1,16 @@
 import gql from 'graphql-tag';
 import CategoryFragment from './CategoryFragment';
-import ContactsFragment from './ContactsFragment';
+import ContactFragment from './ContactFragment';
 import LocationFragment from './LocationFragment';
 import SkillFragment from './SkillFragment';
 
 export default gql`
-    fragment ContractorsFragment on Contractor {
+    fragment ContractorFragment on Contractor {
         id
         name
         avatarUrl
         contacts {
-            ...ContactsFragment
+            ...ContactFragment
         }
         location {
             ...LocationFragment
@@ -25,6 +25,6 @@ export default gql`
     }
     ${LocationFragment}
     ${CategoryFragment}
-    ${ContactsFragment}
+    ${ContactFragment}
     ${SkillFragment}
 `;

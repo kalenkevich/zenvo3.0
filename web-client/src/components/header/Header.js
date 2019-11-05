@@ -5,22 +5,21 @@ import { withRouter } from 'react-router-dom';
 import useStyles from './HeaderStyles';
 import Card from '../common/card';
 import Menu, { MenuItem } from '../common/menu';
-import AuthorizationContext from '../../contexts/AuthorizationContext';
 import MobileContext from '../../contexts/MobileContext';
 import { getClassName } from '../../utils/ClassUtils';
 
-export const getMenuItems = (user) => {
+export const getMenuItems = () => {
   return [{
-    link: '/sign-in',
-    label: 'MENU_ITEM_SIGN_IN',
+    link: '/contractors',
+    label: 'MENU_ITEM_CONTRACTORS',
   }, {
-    link: '/sign-up',
-    label: 'MENU_ITEM_SIGN_UP',
+    link: '/settings',
+    label: 'MENU_ITEM_SETTINGS',
   }];
 };
 
-export const getMenu = (user, { t, isMobile, history }) => {
-  const menuItems = getMenuItems(user);
+export const getMenu = ({ t, history }) => {
+  const menuItems = getMenuItems();
 
   return (
     <Menu>
@@ -42,7 +41,6 @@ const Header = (props) => {
   } = props;
   const { t } = useTranslation();
   const { isMobile } = useContext(MobileContext);
-  const { user } = useContext(AuthorizationContext);
   const classes = useStyles();
   const rootClasses = getClassName([
     className,
@@ -52,7 +50,7 @@ const Header = (props) => {
   return (
     <header className={rootClasses}>
       <Card className={classes.card}>
-        {getMenu(user, { t, isMobile, history })}
+        {getMenu({ t, isMobile, history })}
       </Card>
     </header>
   );

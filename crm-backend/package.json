@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "nodemon -e ts --exec \"npm run start\"",
+    "build": "tsc",
     "start": "ENVIRONMENT=local tsc && node dist/src/index.js"
   },
   "keywords": [],

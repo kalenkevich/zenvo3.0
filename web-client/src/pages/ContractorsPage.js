@@ -1,36 +1,94 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import LoadingContext from '../contexts/LoadingContext';
 import NotificationContext from '../contexts/NotificationContext';
 import Contractors from '../components/contractors/Contractors';
 import ContractorsAPI from '../APIs/ContractorsAPI';
+import Logger from '../services/Logger';
 
 const ContractorsPage = () => {
   const {startFetchingData, stopFetchingData} = useContext(LoadingContext);
   const {showErrorNotification} = useContext(NotificationContext);
-  const [contractors, setContractors] = useState([]);
   const [filter, setFilter] = useState({});
-  const paginationOptions = useState({});
+  const [data, setData] = useState([]);
+  const [paginationOptions, setPaginationOptions] = useState({
+    page: 0,
+    pages: 0,
+    pageSize: 20,
+  });
 
-  const onSearch = useCallback(async () => {
+  const fetchData = async ({ page, pageSize }) => {
     try {
       startFetchingData('contractors');
 
-      const { data, total } = await ContractorsAPI.search(filter);
+      const {
+        data: fetchedData,
+        total,
+      } = await ContractorsAPI.getAll({ page, pageSize });
 
-      setContractors(foundContractors);
+      setData(fetchedData);
+      setPaginationOptions({
+        ...paginationOptions,
+        pages: Math.ceil(total / paginationOptions.pageSize),
+      });
+    } catch (error) {
+      Logger.error(error);
+      showErrorNotification(error.message);
+    } finally {
+      stopFetchingData('contractors');
+    }
+  };
+
+  const searchData = async () => {
+    try {
+      startFetchingData('contractors');
+
+      const {
+        data: fetchedData,
+        total,
+      } = await ContractorsAPI.search(filter, {
+        page: paginationOptions.page,
+        pageSize: paginationOptions.pageSize,
+      });
+
+      setData(fetchedData);
+      setPaginationOptions({
+        ...paginationOptions,
+        pages: Math.ceil(total / paginationOptions.pageSize),
+      });
     } catch (error) {
       showErrorNotification(error.message);
     } finally {
       stopFetchingData('contractors');
     }
-  }, [filter]);
+  };
+
+  const importProfile = async (url) => {
+    try {
+      startFetchingData('contractors');
+
+      const contractor = await ContractorsAPI.importProfile(url);
+
+      console.log(contractor);
+
+    } catch (error) {
+      showErrorNotification(error.message);
+    } finally {
+      stopFetchingData('contractors');
+    }
+  };
 
   return (
     <Contractors
-      contractors={contractors}
+      data={data}
+      pages={paginationOptions.pages}
       filter={filter}
       onFilterChange={setFilter}
-      onSearch={onSearch}
+      onSearch={searchData}
+      onImport={importProfile}
+      onFetchData={(options) => fetchData({
+        page: options.page,
+        pageSize: options.pageSize,
+      })}
     />
   );
 };

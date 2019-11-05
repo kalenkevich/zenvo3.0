@@ -11,7 +11,7 @@ export default class ContractorsResolver {
   @Inject('Logger')
   public logger: Logger;
 
-  @Inject('Logger')
+  @Inject('ContractorsService')
   public contractorsService: ContractorsService;
 
   @Query(returns => ContractorsPageResult)
@@ -26,7 +26,7 @@ export default class ContractorsResolver {
   }
 
   @Query(returns => ContractorsPageResult)
-  public async getAll(@Arg('pagingOptions') pagingOptions: PagingOptions) {
+  public async getAllContractors(@Arg('pagingOptions') pagingOptions: PagingOptions) {
     try {
       return await this.contractorsService.getAll(pagingOptions);
     } catch (error) {

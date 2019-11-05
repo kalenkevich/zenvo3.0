@@ -9,7 +9,6 @@ import settings from '../config/settings';
 import { AppWithSettings } from './contexts/SettingsContext';
 import { MobileApp } from './contexts/MobileContext';
 import { LoadingApp } from './contexts/LoadingContext';
-import { AuthorizedApp } from './contexts/AuthorizationContext';
 import { ThemedApp } from './contexts/ThemeContext';
 import { I18NApp } from './contexts/I18NContext';
 import { NotificationApp } from './contexts/NotificationContext';
@@ -29,9 +28,7 @@ ReactDom.render(
             <ThemedApp>
               <I18NApp>
                 <NotificationApp>
-                  <AuthorizedApp>
-                    <Application/>
-                  </AuthorizedApp>
+                  <Application/>
                 </NotificationApp>
               </I18NApp>
             </ThemedApp>
