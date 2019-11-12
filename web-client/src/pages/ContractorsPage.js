@@ -68,8 +68,13 @@ const ContractorsPage = () => {
 
       const contractor = await ContractorsAPI.importProfile(url);
 
-      console.log(contractor);
+      const newData = [...data, contractor];
 
+      setData(newData);
+      setPaginationOptions({
+        ...paginationOptions,
+        pages: Math.ceil(newData.length / paginationOptions.pageSize),
+      });
     } catch (error) {
       showErrorNotification(error.message);
     } finally {

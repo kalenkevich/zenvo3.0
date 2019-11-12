@@ -25,10 +25,6 @@ const ContractorsPage = (props) => {
     accessor: 'name',
     Cell: row => (<Link to={`/contractor/${row.original.id}`}>{row.value}</Link>)
   }, {
-    Header: t('CONTRACTORS_TABLE_COLUMN_RATE'),
-    id: 'rate',
-    accessor: 'rate',
-  }, {
     Header: t('CONTRACTORS_TABLE_COLUMN_LOCATION'),
     id: 'locationName',
     accessor: (data) => data.location.name,

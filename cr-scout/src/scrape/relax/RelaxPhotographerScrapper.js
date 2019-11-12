@@ -1,4 +1,5 @@
 const BaseScrapper = require('../base/BaseScrapper').BaseScrapper;
+const Logger = require('../../services/Logger').Logger;
 
 class RelaxPhotographerScrapper extends BaseScrapper {
   async scrape() {
@@ -108,7 +109,7 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getSkills = (document) => {
-        const containers = [...document.querySelectorAll('.Price.PersonalFeatures__price.PersonalFeatures__price--wrapped.Price--columns50')];
+        const containers = [...document.querySelectorAll('.Price.PersonalFeatures__price.Price--columns50')];
 
         const photoCategoriesSection = containers.find(container => {
           if (!container) {

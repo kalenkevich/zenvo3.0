@@ -53,16 +53,11 @@ export default class ContractorsService {
     this.logger.info('[ContractorsService.getAll]: Try to get all contractors');
 
     try {
-      const [data, total] = await this.entityManager
-        .createQueryBuilder()
-        .select("profile")
-        .from(Contractor, "profile")
-        .innerJoinAndSelect("profile.location", "location")
-        .innerJoinAndSelect("profile.category", "category")
-        .innerJoinAndSelect("profile.skills", "skills")
-        .skip(pageOptions.page * pageOptions.pageSize)
-        .take(pageOptions.pageSize)
-        .getManyAndCount();
+      const [data, total] = await this.entityManager.getRepository(Contractor).findAndCount({
+        relations: ['location', 'category', 'skills'],
+        skip: pageOptions.page * pageOptions.pageSize,
+        take: pageOptions.pageSize,
+      });
 
       return {
         data,
