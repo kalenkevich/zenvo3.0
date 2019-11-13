@@ -14,6 +14,7 @@ const ContractorsPage = (props) => {
     pages,
     onFetchData,
     onImport,
+    onImportBatch,
   } = props;
 
   const { t } = useTranslation();
@@ -43,7 +44,12 @@ const ContractorsPage = (props) => {
     <div className={classes.root}>
       <h2>{t('CONTRACTORS_PAGE_TITLE')}</h2>
       <ImportForm
+        label={t('IMPORT_PROFILE_LABEL')}
         onImport={onImport}
+      />
+      <ImportForm
+        label={t('IMPORT_BATCH_PROFILE_LABEL')}
+        onImport={onImportBatch}
       />
       <Table
         manual
@@ -65,6 +71,7 @@ ContractorsPage.propTypes = {
   pageSize: PropTypes.number,
   onFetchData: PropTypes.func,
   onImport: PropTypes.func,
+  onImportBatch: PropTypes.func,
 };
 
 export default ContractorsPage;

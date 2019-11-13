@@ -70,40 +70,85 @@ export default class ContractorsService {
     }
   }
 
+  async getContractor(id: number): Promise<Contractor> {
+    return this.entityManager.findOne(Contractor, id, {
+      relations: ['location', 'category', 'skills'],
+    });
+  }
+
+  async createContractor(contractor: Contractor) {
+    const createdContractor = this.entityManager.create(Contractor, contractor);
+
+    return this.entityManager.save(createdContractor);
+  }
+
   async importContractor(url: string): Promise<Contractor> {
     this.logger.info('[ContractorsService.importContractor]: Try to import contractor');
 
     try {
       const rawContractor = await this.crScoutService.importContractor(url);
 
-      const [
-        [category],
-        [location],
-        skills,
-      ] = await Promise.all([
-        this.categoryService.findOrCreateCategories([rawContractor.category.name]),
-        this.locationService.findOrCreateLocations([rawContractor.location.name]),
-        this.skillsService.findOrCreateSkills((rawContractor.skills || [])
-          .filter(({ name }) => name)
-          .map(({ name }) => name))
-      ]);
-
-      return this.createContractor({
-        ...rawContractor,
-        category,
-        location,
-        skills,
-      });
+      return this.saveImportedContractor(rawContractor);
     } catch (error) {
-      this.logger.error(`[ContractorsService.importContractor]: Error while import contractors: ${error.message}`);
+      this.logger.error(`[ContractorsService.importContractor]: Error while import contractor: ${error.message}`);
 
       throw error;
     }
   }
 
-  createContractor(contractor: Contractor) {
-    const createdContractor = this.entityManager.create(Contractor, contractor);
+  async importContractorBatch(url: string): Promise<Contractor[]> {
+    this.logger.info('[ContractorsService.importContractorBatch]: Try to import contractors');
 
-    return this.entityManager.save(createdContractor);
+    try {
+      const rawContractors = await this.crScoutService.importContractorBatch(url);
+
+      return await Promise.all((rawContractors || []).map(contractor => this.saveImportedContractor(contractor))) as Contractor[];
+    } catch (error) {
+      this.logger.error(`[ContractorsService.importContractorBatch]: Error while import contractors: ${error.message}`);
+
+      throw error;
+    }
+  }
+
+  private async saveImportedContractor(rawContractor: Contractor): Promise<Contractor> {
+    const alreadyExistContractor = await this.findContractorBySourceId(
+      rawContractor.sourceId);
+
+    const [
+      [category],
+      [location],
+      skills,
+    ] = await Promise.all([
+      this.categoryService.findOrCreateCategories(
+        [rawContractor.category.name]),
+      this.locationService.findOrCreateLocations([rawContractor.location.name]),
+      this.skillsService.findOrCreateSkills(
+        (rawContractor.skills || []).filter(({name}) => name).
+          map(({name}) => name)),
+    ]);
+
+    const contractorData = {
+      ...rawContractor,
+      category,
+      location,
+      skills,
+    };
+
+    if (alreadyExistContractor) {
+      await this.entityManager.update(Contractor, alreadyExistContractor.id,
+        contractorData);
+
+      return this.getContractor(alreadyExistContractor.id);
+    }
+
+    return this.createContractor(contractorData);
+  }
+
+  async findContractorBySourceId(sourceId?: string) {
+    if (sourceId) {
+      return this.entityManager.findOne(Contractor, { sourceId });
+    }
+
+    return null;
   }
 }

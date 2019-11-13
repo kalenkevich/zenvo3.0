@@ -1,9 +1,13 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn, JoinTable, ManyToMany,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from 'type-graphql';
 import Contact from './ContactModel';
@@ -51,4 +55,16 @@ export default class Contractor {
   @ManyToMany(type => Skill)
   @JoinTable()
   skills: Skill[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  sourceId: string;
+
+  @Field(type => Date)
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @Field(type => Date)
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 }

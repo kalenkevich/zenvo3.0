@@ -8,5 +8,6 @@
   "CONTRACTORS_TABLE_COLUMN_CATEGORY": "Категория",
   "CONTRACTORS_TABLE_COLUMN_SKILLS": "Навыки",
   "IMPORT_PROFILE_LABEL": "URL для импорта",
-  "IMPORT_PROFILE_BUTTON": "Импортировать"
+  "IMPORT_PROFILE_BUTTON": "Импортировать",
+  "IMPORT_BATCH_PROFILE_LABEL": "Импортировать партией"
 }

@@ -82,6 +82,26 @@ const ContractorsPage = () => {
     }
   };
 
+  const importProfileBatch = async (url) => {
+    try {
+      startFetchingData('contractors');
+
+      const contractors = await ContractorsAPI.importProfileBatch(url);
+
+      const newData = [...data, ...contractors];
+
+      setData(newData);
+      setPaginationOptions({
+        ...paginationOptions,
+        pages: Math.ceil(newData.length / paginationOptions.pageSize),
+      });
+    } catch (error) {
+      showErrorNotification(error.message);
+    } finally {
+      stopFetchingData('contractors');
+    }
+  };
+
   return (
     <Contractors
       data={data}
@@ -90,6 +110,7 @@ const ContractorsPage = () => {
       onFilterChange={setFilter}
       onSearch={searchData}
       onImport={importProfile}
+      onImportBatch={importProfileBatch}
       onFetchData={(options) => fetchData({
         page: options.page,
         pageSize: options.pageSize,

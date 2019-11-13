@@ -1,9 +1,8 @@
 const BaseScrapper = require('../base/BaseScrapper').BaseScrapper;
-const Logger = require('../../services/Logger').Logger;
 
 class RelaxPhotographerScrapper extends BaseScrapper {
   async scrape() {
-    const data = await this.page.evaluate(() => {
+    const scrapedProfile = await this.page.evaluate(() => {
       const getName = (document) => {
         const titleSpan = document.querySelector('div.PersonalTitle__content .PersonalTitle__text span');
 
@@ -164,9 +163,11 @@ class RelaxPhotographerScrapper extends BaseScrapper {
     });
 
     await this.page.close();
-    await this.browser.close();
 
-    return data;
+    return {
+      ...scrapedProfile,
+      sourceId: this.url,
+    };
   }
 }
 

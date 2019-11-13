@@ -7,7 +7,7 @@ import Input from '../common/input';
 import Button from '../common/button';
 
 const ImportForm = (props) => {
-  const { className, onImport } = props;
+  const { className, onImport, label } = props;
   const { t } = useTranslation();
   const classes = useStyles();
   const rootClasses = getClassName([
@@ -27,7 +27,7 @@ const ImportForm = (props) => {
     <div className={rootClasses}>
       <Input
         className={classes.input}
-        label={t('IMPORT_PROFILE_LABEL')}
+        label={label}
         value={url}
         onChange={(e) => setUrl(e.target.value)}
       />
@@ -44,6 +44,7 @@ const ImportForm = (props) => {
 
 ImportForm.propTypes = {
   className: PropTypes.string,
+  label: PropTypes.string,
   onImport: PropTypes.func,
 };
 

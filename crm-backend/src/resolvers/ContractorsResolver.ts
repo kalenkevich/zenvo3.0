@@ -46,4 +46,15 @@ export default class ContractorsResolver {
       throw error;
     }
   }
+
+  @Mutation(returns => [Contractor])
+  public async importContractorBatch(@Arg('url') url: string) {
+    try {
+      return await this.contractorsService.importContractorBatch(url);
+    } catch (error) {
+      this.logger.error(error);
+
+      throw error;
+    }
+  }
 }
