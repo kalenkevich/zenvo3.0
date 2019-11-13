@@ -24,7 +24,13 @@ const ContractorsPage = (props) => {
   const columns = useMemo(() => [{
     Header: t('CONTRACTORS_TABLE_COLUMN_NAME'),
     accessor: 'name',
-    Cell: row => (<Link to={`/contractor/${row.original.id}`}>{row.value}</Link>)
+    Cell: row => {
+      if (row.original.sourceId) {
+        return <a href={row.original.sourceId} target={'_blank'}>{row.value}</a>;
+      }
+
+      return row.value;
+    }
   }, {
     Header: t('CONTRACTORS_TABLE_COLUMN_LOCATION'),
     id: 'locationName',

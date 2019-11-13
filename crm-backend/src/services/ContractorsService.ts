@@ -111,8 +111,7 @@ export default class ContractorsService {
   }
 
   private async saveImportedContractor(rawContractor: Contractor): Promise<Contractor> {
-    const alreadyExistContractor = await this.findContractorBySourceId(
-      rawContractor.sourceId);
+    const alreadyExistContractor = await this.findContractorBySourceId(rawContractor.sourceId);
 
     const [
       [category],
@@ -135,10 +134,11 @@ export default class ContractorsService {
     };
 
     if (alreadyExistContractor) {
-      await this.entityManager.update(Contractor, alreadyExistContractor.id,
-        contractorData);
+      for (const key in contractorData) {
+        alreadyExistContractor[key] = contractorData[key];
+      }
 
-      return this.getContractor(alreadyExistContractor.id);
+      return this.entityManager.save(alreadyExistContractor);
     }
 
     return this.createContractor(contractorData);

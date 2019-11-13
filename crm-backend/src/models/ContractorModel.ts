@@ -52,7 +52,7 @@ export default class Contractor {
   category: Category;
 
   @Field(type => [Skill])
-  @ManyToMany(type => Skill)
+  @ManyToMany(type => Skill, { cascade: true })
   @JoinTable()
   skills: Skill[];
 
