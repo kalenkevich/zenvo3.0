@@ -6,7 +6,11 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       const getName = (document) => {
         const titleSpan = document.querySelector('div.PersonalTitle__content .PersonalTitle__text span');
 
-        return titleSpan.textContent;
+        if (titleSpan) {
+          return titleSpan.textContent;
+        }
+
+        return '';
       };
 
       const getAvatarUrl = (document) => {
@@ -44,15 +48,14 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getInstagramContactInfo = (document) => {
-        const button = document.querySelector(
-          '.AdditionalContacts__button.Button.AdditionalContacts__button--instagram.AdditionalContacts__button--onlyIcon');
+        const button = document.querySelector('.AdditionalContacts__button.Button.AdditionalContacts__button--instagram.AdditionalContacts__button--onlyIcon');
 
         if (!button) {
           return null;
         }
 
         const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url') || '';;
+        const value = queryParams.get('url') || '';
 
         return {
           type: 'instagram',
@@ -96,15 +99,25 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       const getLocation = (document) => {
         const span = document.querySelector('.Button.PersonalContacts__address.PersonalContacts__item.Button--outline span');
 
+        if (span) {
+          return {
+            name: span.textContent,
+          };
+        }
+
         return {
-          name: span.textContent,
+          name: '',
         };
       };
 
       const getDescription = (document) => {
         const div = document.querySelector('.PersonalAbout__contentInner');
 
-        return div.innerHTML;
+        if (div) {
+          return div.innerHTML;
+        }
+
+        return '';
       };
 
       const getSkills = (document) => {

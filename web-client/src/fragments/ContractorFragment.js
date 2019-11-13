@@ -22,6 +22,7 @@ export default gql`
             ...SkillFragment
         }
         description
+        sourceId
     }
     ${LocationFragment}
     ${CategoryFragment}
