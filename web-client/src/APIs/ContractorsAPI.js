@@ -66,7 +66,7 @@ class AuthorizationAPI {
   }
 
   async importProfileBatch(url) {
-    const { importProfileBatch: result } = await this.graphqlService.mutate({
+    const { importContractorBatch: result } = await this.graphqlService.mutate({
       variables: { url },
       mutation: gql`
           mutation ImportContractorBatch($url: String!) {
