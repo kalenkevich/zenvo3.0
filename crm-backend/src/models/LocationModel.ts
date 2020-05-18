@@ -14,11 +14,23 @@ export default class Location {
 
   @Field()
   @Column({ default: '' })
+  public city: string;
+
+  @Field()
+  @Column({ default: '' })
+  public country: string;
+
+  @Field()
+  @Column({ default: '' })
   public latitude: string;
 
   @Field()
   @Column({ default: '' })
   public longitude: string;
+
+  @Field()
+  @Column({ default: '' })
+  public point: string;
 
   //------ System data ------
   public systemId: string;

@@ -1,6 +1,5 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Table from 'react-table';
 import 'react-table/react-table.css';

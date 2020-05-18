@@ -18,40 +18,20 @@ export default class CrScoutService {
   }
 
   async importContractor(url): Promise<Contractor> {
-    const {
-      status,
-      result,
-      error,
-    }: any = await this.httpService.post(`${this.crScoutServiceUrl}/scrape/profile`, { url });
-
-    if (status !== 0) {
-      throw new Error(error);
-    }
+    const result: any = await this.httpService.post(`${this.crScoutServiceUrl}/scrape/profile`, { url });
 
     return result as Contractor;
   }
 
   async importContractorBatch(url): Promise<Contractor[]> {
-    const {
-      status,
-      result,
-      error,
-    }: any = await this.httpService.post(`${this.crScoutServiceUrl}/scrape/profile/batch`, { url });
-
-    if (status !== 0) {
-      throw new Error(error);
-    }
+    const result: any = await this.httpService.post(`${this.crScoutServiceUrl}/scrape/profile/batch`, { url });
 
     return result as Contractor[];
   }
 
   async isAlive(): Promise<boolean> {
-    const { status, error }: any = await this.httpService.get(`${this.crScoutServiceUrl}/noop`);
+    const isAlive: boolean = await this.httpService.get(`${this.crScoutServiceUrl}/noop`);
 
-    if (status !== 0) {
-      throw new Error(error);
-    }
-
-    return true;
+    return isAlive;
   }
 }

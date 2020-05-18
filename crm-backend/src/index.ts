@@ -14,6 +14,8 @@ import resolvers from './resolvers';
 import Logger from './services/Logger';
 import CrScoutService from './services/CrScoutService';
 import CrSearchService from './services/CrSearchService';
+import CrClassifierService from './services/CrClassifierService';
+import ContractorsService from './services/ContractorsService';
 
 Container.set('config', settings);
 
@@ -35,6 +37,7 @@ export class ApplicationServer {
     await this.initCrmDatabase();
     await this.initCrScout();
     await this.initCrSearch();
+    await this.initClassifier();
     await this.initServer();
   }
 
@@ -88,6 +91,18 @@ export class ApplicationServer {
     }
   }
 
+  public async initClassifier() {
+    const crClassifierService: CrClassifierService = Container.get('CrClassifierService');
+
+    try {
+      await crClassifierService.isAlive();
+
+      logger.info(`CrClassifierService: connected to ${this.settings.CrClassifierServiceUrl}`)
+    } catch (error) {
+      logger.error(`CrClassifierService: error connection to ${this.settings.CrClassifierServiceUrl} ${error}`)
+    }
+  }
+
   public async initServer() {
     this.app.set('port', this.settings.port);
 
@@ -112,7 +127,13 @@ export class ApplicationServer {
     try {
       this.app.listen({
         port: this.settings.port,
-      }, () => logger.info(`CRMBackend running on port :${this.settings.port}`));
+      }, () => {
+        logger.info(`CRMBackend running on port :${this.settings.port}`);
+
+        const contractorsService: ContractorsService = Container.get('ContractorsService');
+
+        contractorsService.processingService.classifyContractors();
+      });
     } catch (e) {
       logger.error(e);
     }

@@ -21,7 +21,7 @@ export default class CrSearchService {
 
   //TODO Implement paging
   async search(filter: SearchFilterModel, pageOptions: PagingOptions): Promise<ContractorsPageResult> {
-    const { result }: any = await this.httpService.post(`${this.crSearchServiceUrl}/search`, filter);
+    const result: any = await this.httpService.post(`${this.crSearchServiceUrl}/search`, filter);
     const contractors = result as Contractor[];
 
     return {
@@ -31,14 +31,8 @@ export default class CrSearchService {
   }
 
   async isAlive(): Promise<boolean> {
-    const { status, error }: any = await this.httpService.get(`${this.crSearchServiceUrl}/noop`);
+    const isAlive: boolean = await this.httpService.get(`${this.crSearchServiceUrl}/noop`);
 
-    console.log(status);
-
-    if (status !== 0) {
-      throw new Error(error);
-    }
-
-    return true;
+    return isAlive;
   }
 }

@@ -27,7 +27,7 @@ export default class Contractor {
   name: string;
 
   @Field()
-  @Column({default: 0})
+  @Column({ type: "float", default: 0.00 })
   rate: number;
 
   @Field()

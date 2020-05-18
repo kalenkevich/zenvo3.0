@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { Logger } = require('../../services/Logger');
 
 const BrowserSingleton = {
   browser: null,
@@ -43,6 +44,22 @@ class BaseScrapper {
 
   async closeBrowser() {
     await BrowserSingleton.closeBrowser();
+  }
+
+  async retry(func, args = [], count = 3) {
+    try {
+      return func(args);
+    } catch (err) {
+      Logger.error(`[BrowserSingleton.retry] retry attempt: ${count}, err: ${err.message}`);
+
+      --count;
+
+      if (!count) {
+        throw err;
+      }
+
+      return this.retry(func, args, count);
+    }
   }
 }
 

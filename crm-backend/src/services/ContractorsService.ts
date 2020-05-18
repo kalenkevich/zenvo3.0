@@ -9,6 +9,8 @@ import CategoryService from './CategoryService';
 import LocationService from './LocationService';
 import SkillsService from './SkillsService';
 import { ContractorsPageResult, PagingOptions } from '../types/Paging';
+import ProcessingService from './ProcessingService';
+import GeoLocationService from './GeoLocationService';
 
 @Service('ContractorsService')
 export default class ContractorsService {
@@ -32,6 +34,9 @@ export default class ContractorsService {
 
   @Inject('SkillsService')
   skillsService: SkillsService;
+
+  @Inject('ProcessingService')
+  processingService: ProcessingService;
 
   async search(filter: SearchFilterModel, pageOptions: PagingOptions): Promise<ContractorsPageResult> {
     this.logger.info(`[ContractorsService.search]: Try to search contractors with filter: ${JSON.stringify(filter)}`);
@@ -82,6 +87,10 @@ export default class ContractorsService {
     return this.entityManager.save(createdContractor);
   }
 
+  updateContractor(contractor: Contractor) {
+    return this.entityManager.update(Contractor, contractor.id, contractor);
+  }
+
   async importContractor(url: string): Promise<Contractor> {
     this.logger.info('[ContractorsService.importContractor]: Try to import contractor');
 
@@ -118,8 +127,7 @@ export default class ContractorsService {
       [location],
       skills,
     ] = await Promise.all([
-      this.categoryService.findOrCreateCategories(
-        [rawContractor.category.name]),
+      this.categoryService.findOrCreateCategories([rawContractor.category.name]),
       this.locationService.findOrCreateLocations([rawContractor.location.name]),
       this.skillsService.findOrCreateSkills(
         (rawContractor.skills || []).filter(({name}) => name).

@@ -1,7 +1,17 @@
 const BaseScrapper = require('../base/BaseScrapper').BaseScrapper;
 
 class RelaxPhotographerScrapper extends BaseScrapper {
-  async scrape() {
+  constructor(props) {
+    super(props);
+
+    this._scrape = this._scrape.bind(this);
+  }
+
+  scrape() {
+    return this.retry(this._scrape);
+  }
+
+  async _scrape() {
     const scrapedProfile = await this.page.evaluate(() => {
       const getName = (document) => {
         const titleSpan = document.querySelector('div.PersonalTitle__content .PersonalTitle__text span');
@@ -121,7 +131,7 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getSkills = (document) => {
-        const containers = [...document.querySelectorAll('.Price.PersonalFeatures__price.Price--columns50')];
+        const containers = [...document.querySelectorAll('.Price.Features__price.Price--columns50')];
 
         const photoCategoriesSection = containers.find(container => {
           if (!container) {
