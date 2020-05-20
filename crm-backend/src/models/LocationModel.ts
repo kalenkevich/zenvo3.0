@@ -32,6 +32,6 @@ export default class Location {
   @Column({ default: '' })
   public point: string;
 
-  //------ System data ------
-  public systemId: string;
+  @Column({ type: 'float', default: 0.00 })
+  public systemId: number;
 }

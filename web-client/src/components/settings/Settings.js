@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import Button from '../common/button';
 import useStyles from '../contractors/ContractorsStyle';
 
-const Settings = () => {
+const Settings = (props) => {
+  const { } = props;
   const { t } = useTranslation();
   const classes = useStyles();
 

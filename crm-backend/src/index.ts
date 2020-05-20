@@ -131,8 +131,6 @@ export class ApplicationServer {
         logger.info(`CRMBackend running on port :${this.settings.port}`);
 
         const contractorsService: ContractorsService = Container.get('ContractorsService');
-
-        contractorsService.processingService.classifyContractors();
       });
     } catch (e) {
       logger.error(e);

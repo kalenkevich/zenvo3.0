@@ -3,14 +3,14 @@ import { EntityManager } from 'typeorm';
 import Contractor from '../models/ContractorModel';
 import SearchFilterModel from '../models/SearchFilterModel';
 import Logger from './Logger';
-import CrSearchService from './CrSearchService';
 import CrScoutService from './CrScoutService';
+import CrSearchService from './CrSearchService';
+import CrClassifierService from './CrClassifierService';
 import CategoryService from './CategoryService';
 import LocationService from './LocationService';
 import SkillsService from './SkillsService';
-import { ContractorsPageResult, PagingOptions } from '../types/Paging';
 import ProcessingService from './ProcessingService';
-import GeoLocationService from './GeoLocationService';
+import { ContractorsPageResult, PagingOptions } from '../types/Paging';
 
 @Service('ContractorsService')
 export default class ContractorsService {
@@ -25,6 +25,9 @@ export default class ContractorsService {
 
   @Inject('CrScoutService')
   crScoutService: CrScoutService;
+
+  @Inject('CrClassifierService')
+  crClassifierService: CrClassifierService;
 
   @Inject('CategoryService')
   categoryService: CategoryService;
@@ -42,7 +45,7 @@ export default class ContractorsService {
     this.logger.info(`[ContractorsService.search]: Try to search contractors with filter: ${JSON.stringify(filter)}`);
 
     try {
-      const data = await this.crSearchService.search(filter, pageOptions);
+      const data = await this.crClassifierService.searchContractors(filter, pageOptions);
 
       this.logger.info(`[ContractorsService.search]: successful response: ${JSON.stringify(filter)}`);
 
@@ -111,7 +114,9 @@ export default class ContractorsService {
     try {
       const rawContractors = await this.crScoutService.importContractorBatch(url);
 
-      return await Promise.all((rawContractors || []).map(contractor => this.saveImportedContractor(contractor))) as Contractor[];
+      return await Promise.all((rawContractors || []).map(async (contractor) => {
+        await this.saveImportedContractor(contractor);
+      })) as Contractor[];
     } catch (error) {
       this.logger.error(`[ContractorsService.importContractorBatch]: Error while import contractors: ${error.message}`);
 

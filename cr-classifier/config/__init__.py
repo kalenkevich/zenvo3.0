@@ -1,0 +1,1 @@
+db_connection_string = "host=ec2-54-247-125-38.eu-west-1.compute.amazonaws.com port=5432 dbname=d3n7d2elniic70 user=znlekjaietexlq password=40096d57a33cda1236bfc65d9d2dd72e045313dd38e6aaa1aef412c75b469d8d"

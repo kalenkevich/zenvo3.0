@@ -1,35 +1,10 @@
-import os
-from flask import request
+import time
 import numpy as np
-from services.word2vec import skipgram_model_training, tokenize, mapping, generate_training_data, forward_propagation
-from utils.response_utils import make_success_response
-import json
+from repositiries.skills_repository import get_all_skills, update_skills_system_id
+from services.word2vec import skipgram_model_training, mapping, generate_training_data, forward_propagation
 
 
-def get_classified_skills():
-    body = request.json
-    contractor_id = body['contractorId']
-    skills = body['skills']
-
-    tokens = skills
-
-    result, trained_params = classify_text(tokens)
-
-    trained_params['W'] = trained_params['W'].tolist()
-    trained_params['WRD_EMB'] = trained_params['WRD_EMB'].tolist()
-
-    file_path = os.path.join(os.getcwd(), 'resources', str(contractor_id) + ".json")
-    with open(file_path, "w") as text_file:
-        json.dump(trained_params, text_file)
-
-    return make_success_response(result)
-
-
-def start_classify_skills():
-    return make_success_response(True)
-
-
-def classify_text(tokens):
+def suggest_skills(tokens):
     word_to_id, id_to_word = mapping(tokens)
 
     X, Y = generate_training_data(tokens, word_to_id, 3)
@@ -66,3 +41,27 @@ def classify_text(tokens):
         result[input_word] = output_words
 
     return result, trained_params
+
+
+def classify_skills():
+    start_time = time.time()
+
+    all_skills = get_all_skills()
+    skills_length = len(all_skills)
+
+    def skills_mapper(skill):
+        system_id = skill['id'] / skills_length
+
+        skill['systemId'] = system_id
+
+        return skill
+
+    updated_locations = list(map(skills_mapper, all_skills))
+    update_skills_system_id(updated_locations)
+    
+    end_time = time.time()
+
+    return {
+        'totalItems': all_skills,
+        'time': 'all done at {0} seconds'.format(end_time - start_time)
+    }

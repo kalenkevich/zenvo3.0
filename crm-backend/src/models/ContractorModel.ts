@@ -67,4 +67,7 @@ export default class Contractor {
   @Field(type => Date)
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  @Column({type: 'float', array: true, nullable: true })
+  systemVector: number[];
 }

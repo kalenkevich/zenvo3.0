@@ -12,6 +12,6 @@ export default class Category {
   @Column()
   public name: string;
 
-  //------ System data ------
-  public systemId: string;
+  @Column({ type: 'float', default: 0.00 })
+  public systemId: number;
 }

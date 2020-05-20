@@ -2,7 +2,9 @@ import { Inject, Service } from 'typedi';
 import Contractor from '../models/ContractorModel';
 import Logger from './Logger';
 import HttpService from './HttpService';
-import Skill from '../models/SkillModel';
+import Skill, { SkillInput } from '../models/SkillModel';
+import SearchFilterModel from '../models/SearchFilterModel';
+import { PagingOptions } from '../types/Paging';
 
 @Service('CrClassifierService')
 export default class CrClassifierService {
@@ -37,7 +39,66 @@ export default class CrClassifierService {
       skills: preparedSkills
     });
 
-    this.logger.info(`Contractor ${contractorId} result: ${JSON.stringify(result)}`);
+    this.logger.info(`
+    
+      ---------------------------------------------------------------
+      id: ${contractorId}
+      skills: ${preparedSkills},
+      result: ${JSON.stringify(result)}
+      ---------------------------------------------------------------
+      
+    `);
+
+    return result;
+  }
+
+  async searchContractors(filter: SearchFilterModel, pageOptions: PagingOptions) {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/search/contractors`, {
+      filter,
+      pageOptions,
+    });
+
+    return result;
+  }
+
+  async suggestContractors(filter: SearchFilterModel, pageOptions: PagingOptions) {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/suggest/contractors`, {
+      filter,
+      pageOptions,
+    });
+
+    return result;
+  }
+
+  async suggestSkills(skill: SkillInput, count: number) {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/suggest/skills`, {
+      skill,
+      count,
+    });
+
+    return result;
+  }
+
+  async classifyContractors() {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/classify/contractors`);
+
+    return result;
+  }
+
+  async indexSkills() {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/classify/skills`);
+
+    return result;
+  }
+
+  async indexLocations() {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/classify/locations`);
+
+    return result;
+  }
+
+  async indexCategories() {
+    const result: any = await this.httpService.post(`${this.crClassifierServiceUrl}/classify/categories`);
 
     return result;
   }

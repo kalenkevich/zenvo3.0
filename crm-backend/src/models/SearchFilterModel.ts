@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql';
+import { Field, InputType, registerEnumType } from 'type-graphql';
 
 export enum SearchCriteriaType {
   category = 'category',
