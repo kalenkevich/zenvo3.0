@@ -1,4 +1,5 @@
 import time
+from utils.time_measure_utils import get_time_measure
 from repositiries.locations_repository import get_all_locations, update_location_system_id
 
 
@@ -27,5 +28,6 @@ def classify_locations():
 
     return {
         'totalItems': location_length,
-        'time': 'all done at {0} seconds'.format(end_time - start_time)
+        'time': get_time_measure(start_time, end_time),
+        'identifiers': list(map(lambda location: {'id': location['id'], 'systemId': location['systemId']}, all_locations))
     }

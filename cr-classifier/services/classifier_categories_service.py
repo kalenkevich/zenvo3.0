@@ -1,4 +1,5 @@
 import time
+from utils.time_measure_utils import get_time_measure
 from repositiries.categories_repository import get_all_categories, update_categories_system_id
 
 
@@ -22,5 +23,6 @@ def classify_categories():
 
     return {
         'totalItems': categories_length,
-        'time': 'all done at {0} seconds'.format(end_time - start_time)
+        'time': get_time_measure(start_time, end_time),
+        'identifiers': list(map(lambda category: {'id': category['id'], 'systemId': category['systemId']}, all_categories))
     }

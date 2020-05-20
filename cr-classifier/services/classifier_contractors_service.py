@@ -1,4 +1,5 @@
 import time
+from utils.time_measure_utils import get_time_measure
 from repositiries.contractors_repository import get_all_contractors, update_contractor_system_vector
 
 
@@ -20,7 +21,9 @@ def classify_contractors():
 
     return {
         'totalItems': all_contractors,
-        'time': 'all done at {0} seconds'.format(end_time - start_time)
+        'meanRate': mean_rate,
+        'time': get_time_measure(start_time, end_time),
+        'vectors': list(map(lambda contractor: {'id': contractor['id'], 'systemVector': contractor['systemVector']}, all_contractors))
     }
 
 

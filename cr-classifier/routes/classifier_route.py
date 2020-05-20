@@ -5,36 +5,36 @@ from services.classifier_locations_service import classify_locations
 from services.classifier_contractors_service import classify_contractors
 
 
-def start_classify_all_features():
+def classify_all_features_handler():
     result = dict()
 
-    result['skills'] = start_classify_skills()
-    result['categories'] = start_classify_categories()
-    result['locations'] = start_classify_locations()
-    result['contractors'] = start_classify_contractors()
+    result['skills'] = classify_skills()
+    result['categories'] = classify_categories()
+    result['locations'] = classify_locations()
+    result['contractors'] = classify_contractors()
 
     return make_success_response(result)
 
 
-def start_classify_skills():
+def classify_skills_handler():
     result = classify_skills()
 
     return make_success_response(result)
 
 
-def start_classify_categories():
+def classify_categories_handler():
     result = classify_categories()
 
     return make_success_response(result)
 
 
-def start_classify_locations():
+def classify_locations_handler():
     result = classify_locations()
 
     return make_success_response(result)
 
 
-def start_classify_contractors():
+def classify_contractors_handler():
     result = classify_contractors()
 
     return make_success_response(result)

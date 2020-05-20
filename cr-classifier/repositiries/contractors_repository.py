@@ -52,3 +52,24 @@ def update_contractor_system_vector(contractors):
     cur.close()
 
     return True
+
+
+def get_all_contractors_with_vectors():
+    con = DBService.connection
+    cur = con.cursor()
+
+    cur.execute('SELECT c.id, c."systemVector" FROM contractors c WHERE c."systemVector" notnull')
+
+    result = cur.fetchall()
+
+    def result_mapper(contractor):
+        contractor_dict = dict()
+
+        contractor_dict["id"] = contractor[0]
+        contractor_dict["systemVector"] = contractor[1]
+
+        return contractor_dict
+
+    cur.close()
+
+    return list(map(result_mapper, result))

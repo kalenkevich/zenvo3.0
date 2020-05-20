@@ -1,5 +1,6 @@
 import time
 import numpy as np
+from utils.time_measure_utils import get_time_measure
 from repositiries.skills_repository import get_all_skills, update_skills_system_id
 from services.word2vec import skipgram_model_training, mapping, generate_training_data, forward_propagation
 
@@ -63,5 +64,6 @@ def classify_skills():
 
     return {
         'totalItems': all_skills,
-        'time': 'all done at {0} seconds'.format(end_time - start_time)
+        'time': get_time_measure(start_time, end_time),
+        'identifiers': list(map(lambda skill: {'id': skill['id'], 'systemId': skill['systemId']}, all_skills))
     }

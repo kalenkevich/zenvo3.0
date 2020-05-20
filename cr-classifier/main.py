@@ -3,9 +3,9 @@
 import os
 from flask import Flask
 from routes.debug_route import noop
-from routes.search_route import search_contractors
-from routes.classifier_route import start_classify_skills, start_classify_locations, start_classify_categories, start_classify_contractors, start_classify_all_features
-from routes.suggestion_route import suggest_contractors, suggest_skills
+from routes.search_route import search_contractors_handler
+from routes.classifier_route import classify_skills_handler, classify_locations_handler, classify_categories_handler, classify_contractors_handler, classify_all_features_handler
+from routes.suggestion_route import suggest_contractors_handler, suggest_skills_handler
 from services.db_service import DBService
 import config
 
@@ -13,16 +13,19 @@ app = Flask(__name__)
 
 app.add_url_rule('/noop', 'noop', noop, methods=["GET"])
 
-app.add_url_rule('/classify/all', 'start_classify_all_features', start_classify_all_features, methods=["POST"])
-app.add_url_rule('/classify/skills', 'start_classify_skills', start_classify_skills, methods=["POST"])
-app.add_url_rule('/classify/locations', 'start_classify_locations', start_classify_locations, methods=["POST"])
-app.add_url_rule('/classify/categories', 'start_classify_categories', start_classify_categories, methods=["POST"])
-app.add_url_rule('/classify/contractors', 'start_classify_contractors', start_classify_contractors, methods=["POST"])
+"""classify API"""
+app.add_url_rule('/classify/all', 'classify_all_features_handler', classify_all_features_handler, methods=["POST"])
+app.add_url_rule('/classify/skills', 'classify_skills_handler', classify_skills_handler, methods=["POST"])
+app.add_url_rule('/classify/locations', 'classify_locations_handler', classify_locations_handler, methods=["POST"])
+app.add_url_rule('/classify/categories', 'classify_categories_handler', classify_categories_handler, methods=["POST"])
+app.add_url_rule('/classify/contractors', 'classify_contractors_handler', classify_contractors_handler, methods=["POST"])
 
-app.add_url_rule('/search/contractors', 'search_contractors', search_contractors, methods=["POST"])
+"""search API"""
+app.add_url_rule('/search/contractors', 'search_contractors_handler', search_contractors_handler, methods=["POST"])
 
-app.add_url_rule('/suggest/contractors', 'suggest_contractors', suggest_contractors, methods=["POST"])
-app.add_url_rule('/suggest/skills', 'suggest_skills', suggest_skills, methods=["POST"])
+"""suggest API"""
+app.add_url_rule('/suggest/contractors', 'suggest_contractors_handler', suggest_contractors_handler, methods=["POST"])
+app.add_url_rule('/suggest/skills', 'suggest_skills_handler', suggest_skills_handler, methods=["POST"])
 
 if __name__ == "__main__":
     DBService.connect(config.db_connection_string)

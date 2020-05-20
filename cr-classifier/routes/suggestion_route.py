@@ -5,11 +5,11 @@ from utils.response_utils import make_success_response
 from services.classifier_skills_service import suggest_skills
 
 
-def suggest_contractors():
+def suggest_contractors_handler():
     return make_success_response(True)
 
 
-def suggest_skills():
+def suggest_skills_handler():
     body = request.json
     contractor_id = body['contractorId']
     skills = body['skills']
