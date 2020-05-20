@@ -5,22 +5,7 @@ from repositiries.contractors_repository import get_all_contractors_with_vectors
 from services.vector_component_service import get_category_component, get_location_component, get_rate_component, get_skills_component
 from services.math_service import get_distance
 
-"""
 
-search_filter = {
-  name: string,
-  items: [{
-    type: string, // rate | category | location | skills
-    values: ['value'] // id
-  }],
-}
-
-page_options = {
-    page: number;
-    pageSize: number;
-}
-
-"""
 def search_contractors(search_filter, page_options):
     start_time = time.time()
 
@@ -47,8 +32,8 @@ def search_contractors(search_filter, page_options):
     end_time = time.time()
 
     return {
-        'total': 0,
-        'result': result,
+        'items': result,
+        'total': len(sorted_contractors),
         'time': get_time_measure(start_time, end_time),
         "filterVector": search_filter_vector,
     }
