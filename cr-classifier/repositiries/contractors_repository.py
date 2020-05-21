@@ -30,8 +30,8 @@ def get_all_contractors():
         contractor_dict["id"] = contractor[0]
         contractor_dict["rate"] = contractor[1]
         contractor_dict["systemVector"] = contractor[2]
-        contractor_dict["location"] = contractor[3]
-        contractor_dict["category"] = contractor[4]
+        contractor_dict["category"] = contractor[3]
+        contractor_dict["location"] = contractor[4]
         contractor_dict["skills"] = contractor[5]
 
         return contractor_dict

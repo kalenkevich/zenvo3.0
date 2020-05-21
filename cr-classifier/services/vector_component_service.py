@@ -1,3 +1,6 @@
+from math import radians, cos, sin, asin, sqrt
+
+
 def get_contractor_vector(contractor, mean_rate):
     rate_component = get_rate_component(contractor['rate'],  mean_rate)
     category_component = get_category_component(contractor['category'])

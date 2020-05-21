@@ -1,13 +1,10 @@
 import time
+from math import radians, cos, sin, asin, sqrt
 from utils.time_measure_utils import get_time_measure
+from services.math_service import get_normalized_value
 from repositiries.locations_repository import get_all_locations, update_location_system_id
 
 
-"""
-Latitude : max/min +90 to -90
-
-Longitude : max/min +180 to -180
-"""
 def classify_locations():
     start_time = time.time()
 
@@ -15,9 +12,15 @@ def classify_locations():
     location_length = len(all_locations)
 
     def location_mapper(location):
-        system_id = location['id'] / location_length
+        lat = float(location['latitude'])
+        lng = float(location['longitude'])
+        r = 6371
+        lat, lng = map(radians, [lat, lng])
 
-        location['systemId'] = system_id
+        a = sin(lat / 2) ** 2 + cos(lat) * sin(lng / 2) ** 2
+        distance = 2 * r * asin(sqrt(a))
+
+        location['systemId'] = get_normalized_value(distance, min_value=0, max_value=2 * r)
 
         return location
 
