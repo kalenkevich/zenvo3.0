@@ -115,7 +115,7 @@ export default class ContractorsService {
       const rawContractors = await this.crScoutService.importContractorBatch(url);
 
       return await Promise.all((rawContractors || []).map(async (contractor) => {
-        await this.saveImportedContractor(contractor);
+        return await this.saveImportedContractor(contractor);
       })) as Contractor[];
     } catch (error) {
       this.logger.error(`[ContractorsService.importContractorBatch]: Error while import contractors: ${error.message}`);

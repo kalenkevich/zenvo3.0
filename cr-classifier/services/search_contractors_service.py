@@ -17,7 +17,8 @@ def search_contractors(search_filter, page_options):
 
         return {
             'id': contractor['id'],
-            'distance': distance,
+            'distance': float('{:.5f}'.format(distance)),
+            'matchScore': float('{:.2f}'.format(1 - distance)),
             'vector': contractor['systemVector'],
         }
 

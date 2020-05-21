@@ -14,8 +14,8 @@ export class SearchCriteria {
   @Field(type => SearchCriteriaType)
   type: SearchCriteriaType;
 
-  @Field()
-  values: number | string;
+  @Field(type => [Number])
+  values: number[];
 }
 
 @InputType()
