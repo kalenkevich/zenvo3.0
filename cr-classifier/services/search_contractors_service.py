@@ -1,7 +1,7 @@
 import time
 from utils.time_measure_utils import get_time_measure
 from repositiries.identifiers_repository import get_identifiers_batch
-from repositiries.contractors_repository import get_all_contractors_with_vectors
+from repositiries.contractors_repository import get_all_contractors_with_vectors, get_contractor_vector
 from services.vector_component_service import get_category_component, get_location_component, get_rate_component, get_skills_component
 from services.math_service import get_distance
 
@@ -10,10 +10,39 @@ def search_contractors(search_filter, page_options):
     start_time = time.time()
 
     search_filter_vector = get_search_filter_vector(search_filter)
+    result = find_closet_contractors(search_filter_vector, page_options)
+
+    end_time = time.time()
+
+    return {
+        'items': result['items'],
+        'total': result['total'],
+        'time': get_time_measure(start_time, end_time),
+        'inputVector': result['inputVector'],
+    }
+
+
+def suggest_contractors(contractor_id, page_options):
+    start_time = time.time()
+
+    contractor_vector = get_contractor_vector(contractor_id)
+    result = find_closet_contractors(contractor_vector, page_options)
+
+    end_time = time.time()
+
+    return {
+        'items': result['items'],
+        'total': result['total'],
+        'time': get_time_measure(start_time, end_time),
+        'inputVector': result['inputVector'],
+    }
+
+
+def find_closet_contractors(input_vector, page_options):
     contractors_with_vectors = get_all_contractors_with_vectors()
 
     def get_distance_from_search_filter(contractor):
-        distance = get_distance(contractor['systemVector'], search_filter_vector)
+        distance = get_distance(contractor['systemVector'], input_vector)
 
         return {
             'id': contractor['id'],
@@ -30,13 +59,10 @@ def search_contractors(search_filter, page_options):
 
     result = sorted_contractors[page_start:page_end]
 
-    end_time = time.time()
-
     return {
         'items': result,
         'total': len(sorted_contractors),
-        'time': get_time_measure(start_time, end_time),
-        "filterVector": search_filter_vector,
+        'inputVector': input_vector,
     }
 
 

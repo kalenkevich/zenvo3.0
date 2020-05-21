@@ -73,3 +73,16 @@ def get_all_contractors_with_vectors():
     cur.close()
 
     return list(map(result_mapper, result))
+
+
+def get_contractor_vector(contractor_id):
+    con = DBService.connection
+    cur = con.cursor()
+
+    cur.execute('SELECT c."systemVector" FROM contractors c WHERE c.id = %s', [contractor_id])
+
+    result = cur.fetchone()
+
+    cur.close()
+
+    return result[0]

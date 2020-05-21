@@ -20,7 +20,7 @@ def classify_locations():
         a = sin(lat / 2) ** 2 + cos(lat) * sin(lng / 2) ** 2
         distance = 2 * r * asin(sqrt(a))
 
-        location['systemId'] = get_normalized_value(distance, min_value=0, max_value=2 * r)
+        location['systemId'] = get_normalized_value(distance, min_value=-2 * r, max_value=2 * r)
 
         return location
 
