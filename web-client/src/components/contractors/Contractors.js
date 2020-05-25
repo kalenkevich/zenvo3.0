@@ -21,6 +21,9 @@ const ContractorsPage = (props) => {
   const classes = useStyles();
 
   const columns = useMemo(() => [{
+    Header: t('CONTRACTORS_TABLE_ID'),
+    accessor: 'id',
+  }, {
     Header: t('CONTRACTORS_TABLE_COLUMN_NAME'),
     accessor: 'name',
     Cell: row => {
@@ -42,6 +45,10 @@ const ContractorsPage = (props) => {
     Header: t('CONTRACTORS_TABLE_COLUMN_SKILLS'),
     id: 'skills',
     accessor: (data) => data.skills.map(({ name }) => name).join(', '),
+  }, {
+    Header: t('CONTRACTORS_TABLE_COLUMN_SKILLS_COUNT'),
+    id: 'skillsCount',
+    accessor: (data) => data.skills.length,
   }], []);
   const loading = isLoading('contractors');
 

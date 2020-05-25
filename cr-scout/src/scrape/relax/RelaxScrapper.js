@@ -1,6 +1,6 @@
 const BaseScrapper = require('../base/BaseScrapper').BaseScrapper;
 
-class RelaxPhotographerScrapper extends BaseScrapper {
+class RelaxScrapper extends BaseScrapper {
   constructor(props) {
     super(props);
 
@@ -12,6 +12,12 @@ class RelaxPhotographerScrapper extends BaseScrapper {
   }
 
   async _scrape() {
+    const getValue = (url) => {
+      const queryParams = new URLSearchParams(url);
+
+      return queryParams.entries().next().value[1] || '';
+    };
+
     const scrapedProfile = await this.page.evaluate(() => {
       const getName = (document) => {
         const titleSpan = document.querySelector('div.PersonalTitle__content .PersonalTitle__text span');
@@ -48,12 +54,9 @@ class RelaxPhotographerScrapper extends BaseScrapper {
           return null;
         }
 
-        const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url') || '';
-
         return {
           type: 'vk',
-          value,
+          value: getValue(button.href),
         };
       };
 
@@ -64,12 +67,9 @@ class RelaxPhotographerScrapper extends BaseScrapper {
           return null;
         }
 
-        const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url') || '';
-
         return {
           type: 'instagram',
-          value,
+          value: getValue(button.href),
         };
       };
 
@@ -81,12 +81,9 @@ class RelaxPhotographerScrapper extends BaseScrapper {
           return null;
         }
 
-        const queryParams = new URLSearchParams(button.href);
-        const value = queryParams.get('url') || '';
-
         return {
           type: 'instagram',
-          value,
+          value: getValue(button.href),
         };
       };
 
@@ -121,7 +118,7 @@ class RelaxPhotographerScrapper extends BaseScrapper {
       };
 
       const getDescription = (document) => {
-        const div = document.querySelector('.PersonalAbout__contentInner');
+        const div = document.querySelector('.About__contentInner');
 
         if (div) {
           return div.innerHTML;
@@ -194,4 +191,4 @@ class RelaxPhotographerScrapper extends BaseScrapper {
   }
 }
 
-module.exports.RelaxPhotographerScrapper = RelaxPhotographerScrapper;
+module.exports.RelaxScrapper = RelaxScrapper;

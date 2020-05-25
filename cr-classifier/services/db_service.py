@@ -11,3 +11,15 @@ class DBService:
         print('Connected to DB successfully!')
 
         return DBService.connection
+
+    @staticmethod
+    def execute(query):
+        con = DBService.connection
+        cur = con.cursor()
+
+        cur.execute(query)
+
+        raw_result = cur.fetchall()
+        cur.close()
+
+        return raw_result

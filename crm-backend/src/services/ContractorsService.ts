@@ -65,6 +65,7 @@ export default class ContractorsService {
         relations: ['location', 'category', 'skills'],
         skip: pageOptions.page * pageOptions.pageSize,
         take: pageOptions.pageSize,
+        order: { id: 'ASC' }
       });
 
       return {

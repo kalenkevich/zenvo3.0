@@ -1,6 +1,6 @@
 const { Logger } = require('../services/Logger');
-const { RelaxPhotographerScrapper } = require('../scrape/relax/RelaxPhotographerScrapper');
-const { RelaxBatchPhotographerScrapper } = require('../scrape/relax/RelaxBatchPhotographerScrapper');
+const { RelaxScrapper } = require('../scrape/relax/RelaxScrapper');
+const { RelaxBatchScrapper } = require('../scrape/relax/RelaxBatchScrapper');
 const { makeSuccessResponse, makeErrorResponse } = require('../utils/ResponseUtils');
 
 module.exports = (app) => {
@@ -8,11 +8,11 @@ module.exports = (app) => {
     try {
       const { url } = req.body;
 
-      const relaxPhotographerScrapper = new RelaxPhotographerScrapper();
-      await relaxPhotographerScrapper.init({ url });
+      const relaxScrapper = new RelaxScrapper();
+      await relaxScrapper.init({ url });
 
-      const result = await relaxPhotographerScrapper.scrape();
-      await relaxPhotographerScrapper.closeBrowser();
+      const result = await relaxScrapper.scrape();
+      await relaxScrapper.closeBrowser();
 
       return makeSuccessResponse(res, result);
     } catch (error) {
@@ -26,11 +26,11 @@ module.exports = (app) => {
     try {
       const { url } = req.body;
 
-      const relaxBatchPhotographerScrapper = new RelaxBatchPhotographerScrapper();
-      await relaxBatchPhotographerScrapper.init({ url });
+      const relaxBatchScrapper = new RelaxBatchScrapper();
+      await relaxBatchScrapper.init({ url });
 
-      const result = await relaxBatchPhotographerScrapper.scrape();
-      await relaxBatchPhotographerScrapper.closeBrowser();
+      const result = await relaxBatchScrapper.scrape();
+      await relaxBatchScrapper.closeBrowser();
 
       return makeSuccessResponse(res, result);
     } catch (error) {

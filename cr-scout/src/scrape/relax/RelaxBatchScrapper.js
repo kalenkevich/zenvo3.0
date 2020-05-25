@@ -1,8 +1,8 @@
 const { Logger } = require('../../services/Logger');
 const { BaseScrapper } = require('../base/BaseScrapper');
-const { RelaxPhotographerScrapper } = require('./RelaxPhotographerScrapper');
+const { RelaxScrapper } = require('./RelaxScrapper');
 
-class RelaxBatchPhotographerScrapper extends BaseScrapper {
+class RelaxBatchScrapper extends BaseScrapper {
   async scrape() {
     const urlsToScrape = await this.page.evaluate(async () => {
       await new Promise((resolve) => {
@@ -33,7 +33,7 @@ class RelaxBatchPhotographerScrapper extends BaseScrapper {
       let profile;
 
       try {
-        const scraper = new RelaxPhotographerScrapper();
+        const scraper = new RelaxScrapper();
 
         await scraper.init({ url });
 
@@ -51,4 +51,4 @@ class RelaxBatchPhotographerScrapper extends BaseScrapper {
   }
 }
 
-module.exports.RelaxBatchPhotographerScrapper = RelaxBatchPhotographerScrapper;
+module.exports.RelaxBatchScrapper = RelaxBatchScrapper;

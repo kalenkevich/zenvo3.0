@@ -22,22 +22,6 @@ def search_contractors(search_filter, page_options):
     }
 
 
-def suggest_contractors(contractor_id, page_options):
-    start_time = time.time()
-
-    contractor_vector = get_contractor_vector(contractor_id)
-    result = find_closet_contractors(contractor_vector, page_options)
-
-    end_time = time.time()
-
-    return {
-        'items': result['items'],
-        'total': result['total'],
-        'time': get_time_measure(start_time, end_time),
-        'inputVector': result['inputVector'],
-    }
-
-
 def find_closet_contractors(input_vector, page_options):
     contractors_with_vectors = get_all_contractors_with_vectors()
 
