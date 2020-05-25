@@ -5,12 +5,20 @@ from repositiries.train_repository import save_skills_trained_data
 from services.word2vec import skipgram_model_training, mapping, generate_training_data, forward_propagation
 
 
-def train_skills_model(tokens, emb_size=50, learning_rate=0.05, epochs=5000, batch_size=128, should_save_result=True):
+def train_skills_model(
+        tokens,
+        emb_size=50,
+        learning_rate=0.05,
+        epochs=5000,
+        batch_size=128,
+        window_size=3,
+        should_save_result=True,
+):
     start_time = time.time()
 
     word_to_id, id_to_word = mapping(tokens)
 
-    X, Y = generate_training_data(tokens, word_to_id, 3)
+    X, Y = generate_training_data(tokens, word_to_id, window_size)
     vocab_size = len(id_to_word)
 
     m = Y.shape[1]
@@ -52,8 +60,9 @@ def train_skills_model(tokens, emb_size=50, learning_rate=0.05, epochs=5000, bat
         'word_to_id': word_to_id,
         'id_to_word': id_to_word,
         'top_sorted_indexes': top_sorted_indexes_array,
-        'const': cost_results,
+        'costs': cost_results,
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
     }
 
 

@@ -32,5 +32,6 @@ def classify_locations():
     return {
         'totalItems': location_length,
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
         'identifiers': list(map(lambda location: {'id': location['id'], 'systemId': location['systemId']}, all_locations))
     }

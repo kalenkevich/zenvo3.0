@@ -24,6 +24,7 @@ def classify_contractors():
         'totalItems': len(all_contractors),
         'meanRate': mean_rate,
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
         'vectors': list(map(lambda contractor: {'id': contractor['id'], 'systemVector': contractor['systemVector']}, all_contractors))
     }
 

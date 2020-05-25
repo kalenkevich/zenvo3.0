@@ -15,5 +15,6 @@ def suggest_contractors(contractor_id, page_options):
         'items': result['items'],
         'total': result['total'],
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
         'inputVector': result['inputVector'],
     }

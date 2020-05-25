@@ -40,4 +40,3 @@ app.add_url_rule('/suggest/contractors', 'suggest_contractors_handler', suggest_
 if __name__ == "__main__":
     DBService.connect(config.db_connection_string)
     app.run(host='0.0.0.0', port=os.environ.get('PORT', 3003), debug=True)
-

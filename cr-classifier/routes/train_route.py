@@ -11,6 +11,7 @@ def train_skills_model_handler():
     learning_rate = get_float_value(body['learningRate'], 0.05)
     epochs = get_int_value(body['epochs'], 5000)
     batch_size = get_int_value(body['batchSize'], 128)
+    window_size = get_int_value(body['windowSize'], 3)
     should_save_result = body['save']
 
     if should_save_result is None:
@@ -22,6 +23,7 @@ def train_skills_model_handler():
         learning_rate,
         epochs,
         batch_size,
+        window_size,
         should_save_result
     )
 

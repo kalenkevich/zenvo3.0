@@ -24,5 +24,6 @@ def classify_categories():
     return {
         'totalItems': categories_length,
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
         'identifiers': list(map(lambda category: {'id': category['id'], 'systemId': category['systemId']}, all_categories))
     }

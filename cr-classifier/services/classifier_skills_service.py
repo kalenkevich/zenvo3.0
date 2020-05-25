@@ -24,5 +24,6 @@ def classify_skills():
     return {
         'totalItems': all_skills,
         'time': get_time_measure(start_time, end_time),
+        'timeRaw': end_time - start_time,
         'identifiers': list(map(lambda skill: {'id': skill['id'], 'systemId': skill['systemId']}, all_skills))
     }

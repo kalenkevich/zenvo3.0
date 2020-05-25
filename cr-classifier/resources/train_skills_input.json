@@ -46,5 +46,6 @@
     "learningRate": "0.05",
     "epochs": "5000",
     "batchSize": "128",
+    "windowSize": "3",
 	"save": "true"
 }
